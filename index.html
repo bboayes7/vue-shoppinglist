@@ -7,26 +7,31 @@
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="css/styles.css">
-        
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     </head>
     <body>
-        <div id="shopping-list">
-            <div class="header">
-                <h1>{{ header }}</h1>
-                <button v-if="state === 'default'" class="btn btn-primary" @click="changeState('edit')">Add Item</button>
-                <button v-else class="btn btn-danger" @click="changeState('default')">Cancel</button>
+        <div id="shopping-list" class="container">
+            <div class="jumbotron">
+                <h1 class="display-4 col-12">{{ header.toUpperCase() }}</h1>
             </div>
-            <div v-if="state === 'edit'" class="add-item-form">
-                <input v-model="newItem" type="text" placeholder="Add an item" @keyup.enter="addItem">
-                <button class="btn btn-primary" :disabled="newItem.length === 0" @click="addItem">Add Item</button>
+
+            <form class="add-item-form input-group">
+                <input class="col-10" v-model="newItem" type="text" placeholder="Add an item" @keyup.enter="addItem">
+                <button class="btn btn-primary col-2" :disabled="newItem.length === 0" @click="addItem">Add Item</button>
+            </form>
+            <div class="card">
+                <ul class="list-group list-group-flush">
+                    <transition-group name="fade">
+                        <li v-for="item in reversedItems" :key="item.id" :class="{strikeout: item.purchased}" @click="togglePurchased(item)" class="list-group-item"><i :class="checkboxToggled(item)"></i> {{ item.label }} <i @click="deleteItem(item)" class="fas fa-window-close fa-2x" :title="messageArchive"></i></li>
+                    </transition-group>
+                </ul>
             </div>
-            <ul>
-                <li v-for="item in reversedItems" :class="{strikeout: item.purchased}" @click="togglePurchased(item)">{{ item.label }}</li>
-            </ul>
-            <p v-if="items.length === 0">All items bought.</p>
+
+            <p class="alert alert-success" role="alert" v-if="items.length === 0">All items bought.</p>
         </div>
         <script src="https://unpkg.com/vue"></script>
         <script src="js/app.js"></script>
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        
     </body>
 </html>
